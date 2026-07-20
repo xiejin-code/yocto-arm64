@@ -6,7 +6,7 @@
 #   ./env.sh start    - Enter the BitBake shell environment
 #
 
-BUILD_BASE="${PWD}/bitbake-builds/poky-wrynose-poky-distro_poky-altcfg-machine_genericarm64"
+BUILD_BASE="${PWD}/bitbake-builds/poky-altcfg-wrynose"
 BUILD_DIR="${BUILD_BASE}/build"
 INIT_SCRIPT="${BUILD_DIR}/init-build-env"
 OE_CORE_DIR="${BUILD_BASE}/layers/openembedded-core"
@@ -19,7 +19,7 @@ case "${1}" in
 
         if [ ! -f "${INIT_SCRIPT}" ]; then
             echo "BitBake environment not initialized, running 'bitbake-setup init'..."
-            ./bitbake/bin/bitbake-setup init poky poky machine/genericarm64 distro/poky-altcfg --non-interactive || {
+            ./bitbake/bin/bitbake-setup init poky-wrynose poky machine/genericarm64 distro/poky-altcfg --non-interactive || {
                 echo "Error: 'bitbake-setup init' failed" >&2
                 exit 1
             }
