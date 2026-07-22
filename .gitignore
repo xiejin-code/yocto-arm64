@@ -1,1 +1,4 @@
-bitbake-builds/
+/bitbake-builds/
+/downloads/
+/sstate-cache/
+/bb-source-*

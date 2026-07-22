@@ -5,35 +5,35 @@
             "git-remote": {
                 "uri": "https://git.openembedded.org/bitbake",
                 "branch": "2.18",
-                "rev": "2.18"
+                "rev": "acfe02fa38b5da9e6a36c6cedcf91d4fcbefbfbd"
             }
         },
         "openembedded-core": {
             "git-remote": {
                 "uri": "https://git.openembedded.org/openembedded-core",
                 "branch": "wrynose",
-                "rev": "wrynose"
+                "rev": "6f5681afb324aed2cba4e5b819ffc878f74a2bac"
             }
         },
         "meta-yocto": {
             "git-remote": {
                 "uri": "https://git.yoctoproject.org/meta-yocto",
                 "branch": "wrynose",
-                "rev": "wrynose"
+                "rev": "824795b885b25e074a2880fbcd54e1a6c875d47d"
             }
         },
         "meta-arm": {
             "git-remote": {
                 "uri": "https://git.yoctoproject.org/meta-arm",
                 "branch": "wrynose",
-                "rev": "wrynose"
+                "rev": "caa36c53f796beb25d9b9f58b1b7a492e9987e15"
             }
         },
         "meta-rockchip": {
             "git-remote": {
                 "uri": "https://git.yoctoproject.org/meta-rockchip",
                 "branch": "wrynose",
-                "rev": "wrynose"
+                "rev": "9d02575bfd9ca5e87c394f593f2bbdbdee914d4e"
             }
         }
     },
@@ -55,7 +55,8 @@
                 ],
                 "oe-fragments": [
                     "machine/fzhub",
-                    "distro/poky-altcfg"
+                    "distro/poky-altcfg",
+                    "fzhub/build-defaults"
                 ]
             }
         ]
