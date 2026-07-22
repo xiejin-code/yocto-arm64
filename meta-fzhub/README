@@ -1,0 +1,24 @@
+meta-fzhub
+==========
+
+This layer contains product-specific metadata for the RK3568-based FZHub platform.
+
+Dependencies
+============
+
+  URI: https://git.openembedded.org/openembedded-core
+  layer: meta
+  branch: wrynose
+
+  URI: https://git.yoctoproject.org/meta-rockchip
+  layer: meta-rockchip
+  branch: wrynose
+
+The meta-rockchip layer also requires meta-arm.
+
+Machine support
+===============
+
+The initial `fzhub` MACHINE inherits the RK3568 SoC defaults. It is a skeleton
+until its device tree, U-Boot defconfig, and image layout are defined, and is
+not yet sufficient for a bootable hardware image.

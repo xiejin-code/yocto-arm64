@@ -1,0 +1,64 @@
+{
+    "description": "RK3568 platform build based on Poky alternative configuration, Yocto 6.0 Wrynose",
+    "sources": {
+        "bitbake": {
+            "git-remote": {
+                "uri": "https://git.openembedded.org/bitbake",
+                "branch": "2.18",
+                "rev": "2.18"
+            }
+        },
+        "openembedded-core": {
+            "git-remote": {
+                "uri": "https://git.openembedded.org/openembedded-core",
+                "branch": "wrynose",
+                "rev": "wrynose"
+            }
+        },
+        "meta-yocto": {
+            "git-remote": {
+                "uri": "https://git.yoctoproject.org/meta-yocto",
+                "branch": "wrynose",
+                "rev": "wrynose"
+            }
+        },
+        "meta-arm": {
+            "git-remote": {
+                "uri": "https://git.yoctoproject.org/meta-arm",
+                "branch": "wrynose",
+                "rev": "wrynose"
+            }
+        },
+        "meta-rockchip": {
+            "git-remote": {
+                "uri": "https://git.yoctoproject.org/meta-rockchip",
+                "branch": "wrynose",
+                "rev": "wrynose"
+            }
+        }
+    },
+    "bitbake-setup": {
+        "configurations": [
+            {
+                "name": "rk3568",
+                "description": "RK3568 platform with the Poky systemd distribution",
+                "setup-dir-name": "rk3568-wrynose",
+                "bb-layers": [
+                    "openembedded-core/meta",
+                    "meta-yocto/meta-poky",
+                    "meta-arm/meta-arm",
+                    "meta-arm/meta-arm-toolchain",
+                    "meta-rockchip"
+                ],
+                "bb-layers-file-relative": [
+                    "../meta-fzhub"
+                ],
+                "oe-fragments": [
+                    "machine/fzhub",
+                    "distro/poky-altcfg"
+                ]
+            }
+        ]
+    },
+    "version": "1.0"
+}
