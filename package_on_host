@@ -1,0 +1,2 @@
+#This file remind you which packages need to be installed on your host(ubuntu 26.04) for rk3568.
+sudo apt install libcrypt-dev
