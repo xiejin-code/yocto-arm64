@@ -2,3 +2,4 @@
 /downloads/
 /sstate-cache/
 /bb-source-*
+/buildtools
