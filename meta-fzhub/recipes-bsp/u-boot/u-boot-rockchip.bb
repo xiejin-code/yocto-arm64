@@ -62,7 +62,7 @@ do_configure:prepend() {
 
 # Generate Rockchip style loader binaries
 RK_IDBLOCK_IMG = "idblock.img"
-RK_LOADER_BIN = "loader.bin"
+RK_LOADER_BIN = "MiniLoaderAll.bin"
 RK_TRUST_IMG = "trust.img"
 UBOOT_BINARY = "uboot.img"
 
@@ -78,6 +78,9 @@ do_compile:append() {
 			cp -rT ${S}/${d} ${d}
 		done
 
+		# Fix rkbin path: rkbin is unpacked to ${S}/../rkbin (sources/rkbin)
+        sed -i "s|^RKBIN_TOOLS=.*|RKBIN_TOOLS=$(dirname ${S})/rkbin/tools|" make.sh
+
 		# Pack rockchip loader images
 		./make.sh
 	fi
@@ -86,16 +89,18 @@ do_compile:append() {
 
 	# Generate idblock image
 	bbnote "${PN}: Generating ${RK_IDBLOCK_IMG} from ${RK_LOADER_BIN}"
-	./tools/boot_merger --unpack "${RK_LOADER_BIN}"
+	#boot_merger belongs to rkbin, copy it to build/tools
+	cp ${S}/../rkbin/tools/boot_merger ${B}/tools/
+	./tools/boot_merger unpack -i "${RK_LOADER_BIN}" -o .
 
-	if [ -f FlashHead ];then
-		cat FlashHead FlashData > "${RK_IDBLOCK_IMG}"
+	if [ -f FlashHead.bin ];then
+		cat FlashHead.bin FlashData.bin > "${RK_IDBLOCK_IMG}"
 	else
-		./tools/mkimage -n "${SOC_FAMILY}" -T rksd -d FlashData \
+		./tools/mkimage -n "${SOC_FAMILY}" -T rksd -d FlashData.bin \
 			"${RK_IDBLOCK_IMG}"
 	fi
 
-	cat FlashBoot >> "${RK_IDBLOCK_IMG}"
+	cat FlashBoot.bin >> "${RK_IDBLOCK_IMG}"
 }
 
 do_deploy:append() {
