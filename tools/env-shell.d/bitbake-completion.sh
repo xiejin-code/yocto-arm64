@@ -23,48 +23,107 @@ BITBAKE_RECIPE_CACHE="${BUILDDIR}/cache/bitbake-completion-recipes.txt"
 BITBAKE_CACHE_TTL="${BITBAKE_CACHE_TTL:-3600}"
 BITBAKE_COMPLETION_SOURCE="${BITBAKE_COMPLETION_SOURCE:-auto}"
 
+# ---- Logging ----
+_bitbake_log_failure() {
+    printf '\033[1;31mFAILURE\033[0m %s\n' "$*" >&2
+}
+
 # ---- Extract recipe names from `bitbake -s` (includes -native/-nativesdk) ----
-# Output: two header lines + "name    version" rows; take col 1, skip headers
+# Output may include BitBake progress lines; only accept rows from the recipe
+# table, where the second column is the version field prefixed with ':'.
 _bitbake_recipes_from_show() {
-    bitbake -s 2>/dev/null \
-        | awk 'NR>2 && $1 ~ /^[A-Za-z0-9_.+-]+$/ {print $1}' \
-        | sort -u
+    ( set -o pipefail
+      bitbake -s \
+        | awk '
+            /^Recipe Name[[:space:]]+/ { in_recipes = 1; next }
+            in_recipes && $1 ~ /^[A-Za-z0-9_.+-]+$/ && $2 ~ /^:/ { print $1 }
+        ' \
+        | sort -u )
 }
 
 # ---- Extract names from `bitbake-layers show-recipes` (with variants) ----
 # Output: "=== ... ===" title + one name per line; filter non-name lines
 _bitbake_recipes_from_layers() {
-    bitbake-layers show-recipes -r --show-variants 2>/dev/null \
+    ( set -o pipefail
+      bitbake-layers show-recipes -r --show-variants \
         | awk '/^[A-Za-z0-9_.+-]+$/ {print $1}' \
-        | sort -u
+        | sort -u )
+}
+
+# ---- Try one data source and explain the result ----
+_bitbake_try_recipe_source() {
+    local source tmp err status first_error
+    source="$1"
+    tmp="$2"
+    err="${tmp}.${source}.err"
+
+    : > "${tmp}"
+
+    case "${source}" in
+        show)
+            _bitbake_recipes_from_show > "${tmp}" 2> "${err}"
+            ;;
+        layers)
+            _bitbake_recipes_from_layers > "${tmp}" 2> "${err}"
+            ;;
+        *)
+            BITBAKE_COMPLETION_ERROR="Unknown recipe source '${source}'."
+            rm -f "${err}"
+            return 1
+            ;;
+    esac
+    status=$?
+
+    if [ "${status}" -ne 0 ]; then
+        first_error="$(awk 'NF { print; exit }' "${err}" 2>/dev/null)"
+        if [ -n "${first_error}" ]; then
+            BITBAKE_COMPLETION_ERROR="Source '${source}' failed with exit status ${status}: ${first_error}"
+        else
+            BITBAKE_COMPLETION_ERROR="Source '${source}' failed with exit status ${status}."
+        fi
+        rm -f "${err}"
+        return 1
+    fi
+
+    if [ ! -s "${tmp}" ]; then
+        BITBAKE_COMPLETION_ERROR="Source '${source}' completed but produced no recipe names."
+        rm -f "${err}"
+        return 1
+    fi
+
+    rm -f "${err}"
+    BITBAKE_COMPLETION_ERROR=""
+    return 0
 }
 
 # ---- Refresh cache (regenerate the recipe list) ----
 _bitbake_refresh_recipes() {
     local cache_dir tmp
+    BITBAKE_COMPLETION_ERROR=""
     cache_dir="$(dirname "${BITBAKE_RECIPE_CACHE}")"
     mkdir -p "${cache_dir}"
     tmp="${BITBAKE_RECIPE_CACHE}.$$"
 
     case "${BITBAKE_COMPLETION_SOURCE}" in
         layers)
-            _bitbake_recipes_from_layers > "${tmp}"
+            _bitbake_try_recipe_source layers "${tmp}"
             ;;
         show)
-            _bitbake_recipes_from_show > "${tmp}"
+            _bitbake_try_recipe_source show "${tmp}"
             ;;
         *)  # auto
-            _bitbake_recipes_from_show > "${tmp}"
-            if [ ! -s "${tmp}" ]; then
-                _bitbake_recipes_from_layers > "${tmp}"
-            fi
+            _bitbake_try_recipe_source show "${tmp}" || \
+                _bitbake_try_recipe_source layers "${tmp}"
             ;;
     esac
 
     if [ -s "${tmp}" ]; then
         mv "${tmp}" "${BITBAKE_RECIPE_CACHE}"
+        return 0
     else
         rm -f "${tmp}"
+        _bitbake_log_failure "${BITBAKE_COMPLETION_ERROR:-Recipe cache was not updated because all configured sources failed.}"
+        return 1
     fi
 }
 
@@ -106,6 +165,9 @@ complete -F _bitbake_completion bitbake
 
 # ---- Force refresh helper ----
 bitbake-completion-refresh() {
-    _bitbake_refresh_recipes
-    echo "bitbake completion cache refreshed: ${BITBAKE_RECIPE_CACHE}"
+    if _bitbake_refresh_recipes; then
+        printf 'Bitbake RecipeCache saved: %s\n' "${BITBAKE_RECIPE_CACHE}"
+    else
+        return 1
+    fi
 }
