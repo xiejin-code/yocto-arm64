@@ -10,6 +10,8 @@ SRC_URI = " \
 	git://github.com/JeffyCN/mirrors.git;protocol=https;nobranch=1;branch=kernel-4.19-2022_01_10; \
 "
 
-S = "${WORKDIR}/git"
+# linux-libc-headers.inc defaults to the kernel.org tarball layout
+# (${UNPACKDIR}/linux-${PV}); Git fetches unpack to ${UNPACKDIR}/${BP}.
+S = "${UNPACKDIR}/${BP}"
 
 LIC_FILES_CHKSUM = "file://COPYING;md5=bbea815ee2795b2f4230826c0c6b8814"

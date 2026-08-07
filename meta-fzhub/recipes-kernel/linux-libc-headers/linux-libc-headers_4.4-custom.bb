@@ -18,7 +18,9 @@ SRC_URI = " \
 	file://${THISDIR}/linux-libc-headers_4.4-custom/0008-netfilter-nft_log-restrict-the-log-prefix-length-to-.patch \
 "
 
-S = "${WORKDIR}/git"
+# linux-libc-headers.inc defaults to the kernel.org tarball layout
+# (${UNPACKDIR}/linux-${PV}); Git fetches unpack to ${UNPACKDIR}/${BP}.
+S = "${UNPACKDIR}/${BP}"
 
 LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
 

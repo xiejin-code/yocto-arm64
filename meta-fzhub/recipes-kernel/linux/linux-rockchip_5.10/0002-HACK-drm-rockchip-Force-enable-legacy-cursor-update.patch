@@ -7,6 +7,7 @@ For async commit.
 
 Change-Id: I36ea434a97cb3205441304795526ee7e028da4fd
 Signed-off-by: Jeffy Chen <jeffy.chen@rock-chips.com>
+Upstream-Status: Inappropriate [Rockchip-specific workaround]
 ---
  drivers/gpu/drm/rockchip/rockchip_drm_vop.c  | 2 +-
  drivers/gpu/drm/rockchip/rockchip_drm_vop2.c | 2 +-
