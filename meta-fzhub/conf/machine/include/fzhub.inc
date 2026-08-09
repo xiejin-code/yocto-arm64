@@ -6,8 +6,8 @@ SPL_BINARY = ""
 IMAGE_FSTYPES:remove = "wic wic.bmap"
 WKS_FILE = ""
 
-# fzhub: build and deploy u-boot + misc partition automatically with any image
-EXTRA_IMAGEDEPENDS += "virtual/bootloader rk3568-misc"
+# fzhub: build and deploy u-boot + misc + parameter partition automatically with any image
+EXTRA_IMAGEDEPENDS += "virtual/bootloader rk3568-misc rk3568-parameter"
 MACHINE_ESSENTIAL_EXTRA_RDEPENDS:remove = "u-boot-extlinux"
 
 # fzhub: kernel — use Rockchip-style boot.img (kernel+dtb packed), drop plain Image
