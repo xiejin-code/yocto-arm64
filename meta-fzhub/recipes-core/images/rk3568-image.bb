@@ -20,3 +20,6 @@ deploy_rootfs_img() {
 	# ${IMAGE_BASENAME}-${MACHINE}.rootfs.ext4 is produced by IMAGE_FSTYPES += "ext4"
 	ln -sf "${IMAGE_BASENAME}-${MACHINE}.rootfs.ext4" "${IMGDEPLOYDIR}/rootfs.img"
 }
+
+#development mode no need passwords
+IMAGE_FEATURES += "empty-root-password"
