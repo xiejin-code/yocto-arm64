@@ -22,6 +22,7 @@ SRC_URI = " \
 	file://0001-kbuild-use-fmacro-prefix-map-to-make-__FILE__-a-rela.patch \
 	file://0002-HACK-Support-python3-for-dtoc.patch \
 	file://0003-Revert-Makefile-enable-Werror-option.patch \
+	file://bootdelay.cfg \
 "
 
 SRCREV_FORMAT = "default_rkbin"
