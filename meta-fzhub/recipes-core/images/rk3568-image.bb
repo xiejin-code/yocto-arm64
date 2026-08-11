@@ -1,6 +1,10 @@
 require recipes-core/images/core-image-minimal.bb
 
-IMAGE_INSTALL += "kernel-modules"
+IMAGE_INSTALL += " \
+    kernel-modules \
+    android-tools \
+    android-tools-adbd \
+"
 
 # fzhub: produce a Rockchip-style rootfs.img for the 'rootfs' GPT partition.
 #

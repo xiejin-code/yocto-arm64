@@ -15,6 +15,13 @@
                 "rev": "6f5681afb324aed2cba4e5b819ffc878f74a2bac"
             }
         },
+        "meta-openembedded": {
+            "git-remote": {
+                "uri": "https://git.openembedded.org/meta-openembedded",
+                "branch": "wrynose",
+                "rev": "6bf0d8ad57b33950bab4c7f6c037e1ccb6f6e2eb"
+            }
+        },
         "meta-yocto": {
             "git-remote": {
                 "uri": "https://git.yoctoproject.org/meta-yocto",
@@ -48,7 +55,8 @@
                     "meta-yocto/meta-poky",
                     "meta-arm/meta-arm",
                     "meta-arm/meta-arm-toolchain",
-                    "meta-rockchip"
+                    "meta-rockchip",
+                    "meta-openembedded/meta-oe"
                 ],
                 "bb-layers-file-relative": [
                     "../meta-fzhub"
