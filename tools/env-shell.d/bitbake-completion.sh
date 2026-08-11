@@ -36,7 +36,7 @@ _bitbake_recipes_from_show() {
       bitbake -s \
         | awk '
             /^Recipe Name[[:space:]]+/ { in_recipes = 1; next }
-            in_recipes && $1 ~ /^[A-Za-z0-9_.+-]+$/ && $2 ~ /^:/ { print $1 }
+            in_recipes && $1 ~ /^[A-Za-z0-9_.+-]+$/ && $2 ~ /^[0-9]*:/ { print $1 }
         ' \
         | sort -u )
 }
