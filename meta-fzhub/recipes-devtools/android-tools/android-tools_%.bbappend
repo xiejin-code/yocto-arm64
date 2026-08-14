@@ -14,7 +14,7 @@
 #    (which only installs one android-gadget-setup script).
 
 # Build adbd for the target. Adb for host use.
-TOOLS:class-target = "adb adbd"
+TOOLS:class-target = "adbd"
 
 do_install:append:class-target() {
     install -d ${D}${sysconfdir}
