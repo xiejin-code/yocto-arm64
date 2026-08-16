@@ -6,7 +6,7 @@ require linux-rockchip.inc
 
 inherit local-git
 
-SRCREV = "8eee1737e22569c3ccc6439cadd19a387baad447"
+SRCREV = "818a2d6c275dd58a33994898c05f4eff6a6d57c2"
 SRC_URI = " \
 	git://github.com/xiejin-code/rk3568-kernel.git;protocol=ssh;nobranch=1;branch=main; \
 	file://${THISDIR}/files/cgroups.cfg \
